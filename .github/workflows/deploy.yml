@@ -29,9 +29,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install specify-cli
 
-      - name: Initialize Spec Kit for Copilot
+      - name: Initialize Spec Kit
         run: |
           specify init . --integration copilot --force
+
+      - name: Show Spec Kit help
+        run: |
+          specify --help
+          specify integration --help
+          specify workflow --help
 
       - name: Azure Login via OIDC
         uses: azure/login@v2
@@ -40,29 +46,9 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Show Spec Kit help
+      - name: Spec Kit workflow or integration step
         run: |
-          specify --help
-
-      - name: Spec Kit specify
-        run: |
-          specify specify
-
-      - name: Spec Kit plan
-        run: |
-          specify plan
-
-      - name: Spec Kit tasks
-        run: |
-          specify tasks
-
-      - name: Spec Kit implement with Copilot
-        run: |
-          specify implement --agent copilot
-
-      - name: Show generated files
-        run: |
-          find . -maxdepth 4 -type f | sort
+          echo "Replace this with the correct Spec Kit command discovered from help output"
 
       - name: Terraform Init
         working-directory: envs/canary/generated
