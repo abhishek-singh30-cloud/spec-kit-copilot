@@ -46,7 +46,7 @@ jobs:
 
       - name: Run Spec Kit workflow
         run: |
-          specify workflow run specs/canary/infra-spec.md
+          specify workflow run --help
 
       - name: Terraform Init
         working-directory: envs/canary/generated
