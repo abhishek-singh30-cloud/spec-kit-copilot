@@ -16,18 +16,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install generation dependencies
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Install Spec Kit
         run: |
           python -m pip install --upgrade pip
-          pip install pyyaml
+          pip install specify-cli
+
+      - name: Initialize Spec Kit for Copilot
+        run: |
+          specify init --integration copilot
 
       - name: Azure Login via OIDC
         uses: azure/login@v2
@@ -36,16 +40,25 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Generate Terraform from spec
+      - name: Spec Kit specify
         run: |
-          mkdir -p envs/canary/generated
-          python scripts/generate_from_spec.py \
-            --spec specs/canary/infra-spec.md \
-            --output envs/canary/generated
+          specify specify
+
+      - name: Spec Kit plan
+        run: |
+          specify plan
+
+      - name: Spec Kit tasks
+        run: |
+          specify tasks
+
+      - name: Spec Kit implement with Copilot
+        run: |
+          specify implement --agent copilot
 
       - name: Show generated files
         run: |
-          find envs/canary/generated -maxdepth 2 -type f | sort
+          find . -maxdepth 4 -type f | sort
 
       - name: Terraform Init
         working-directory: envs/canary/generated
