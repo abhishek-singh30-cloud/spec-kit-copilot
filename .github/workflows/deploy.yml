@@ -6,7 +6,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: canary
+    environment: prod
 
     permissions:
       id-token: write
