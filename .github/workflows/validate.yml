@@ -1,1 +1,32 @@
+name: Validate Canary
 
+on:
+  pull_request:
+    paths:
+      - "infra-spec.md"
+      - "envs/canary/**"
+      - "docs/**"
+      - ".github/workflows/validate.yml"
+      - ".github/workflows/deploy.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        working-directory: envs/canary
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        working-directory: envs/canary
+        run: terraform validate
