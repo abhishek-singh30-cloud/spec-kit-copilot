@@ -6,7 +6,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: prod
+    environment: canary
 
     permissions:
       id-token: write
@@ -33,11 +33,13 @@ jobs:
         run: |
           specify init . --integration copilot --force
 
-      - name: Show Spec Kit help
+      - name: Install Copilot integration
         run: |
-          specify --help
-          specify integration --help
-          specify workflow --help
+          specify integration install copilot
+
+      - name: Discover available workflows
+        run: |
+          specify workflow list
 
       - name: Azure Login via OIDC
         uses: azure/login@v2
@@ -46,9 +48,9 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Spec Kit workflow or integration step
+      - name: Run Spec Kit workflow
         run: |
-          echo "Replace this with the correct Spec Kit command discovered from help output"
+          specify workflow run <workflow-id-or-path>
 
       - name: Terraform Init
         working-directory: envs/canary/generated
