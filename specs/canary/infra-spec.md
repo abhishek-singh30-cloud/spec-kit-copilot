@@ -1,4 +1,4 @@
-# Canary Infrastructure Specification
+# Canary Infrastructure Specifications
 
 ## Goal
 Deploy a minimal Azure canary environment using Terraform, Spec Kit, GitHub Actions, and Azure OIDC federation.
