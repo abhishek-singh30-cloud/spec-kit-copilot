@@ -31,7 +31,7 @@ jobs:
 
       - name: Initialize Spec Kit for Copilot
         run: |
-          specify init . --integration copilot
+          specify init . --integration copilot --force
 
       - name: Azure Login via OIDC
         uses: azure/login@v2
